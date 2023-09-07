@@ -21,6 +21,17 @@ type TodoItem struct {
 	UpdatedAd   *time.Time `json:"updated_ad,omitempty"`
 }
 
+type TodoItemCreation struct {
+	Id          int    `json:"id"`
+	Title       string `json:"title" gorm:"column:title"`
+	Description string `json:"description" gorm:"column:description"`
+	Status      string `json:"status" gorm:"column:status"`
+}
+
+func (TodoItemCreation) TableName() string {
+	return "todo_items"
+}
+
 func main() {
 	fmt.Println("Hello World!!")
 
@@ -40,17 +51,50 @@ func main() {
 
 	fmt.Println(db)
 
-	item := TodoItem{
-		Id:          8,
-		Title:       "This is title 8",
-		Description: "This is description 8",
+	r := gin.Default()
+
+	// CRUD: Create, Read, Update, Delete
+	// POST /v1/items (create a new item)
+	// GET /v1/items (list items) /v1/items?page=1
+	// GET /v1/items/:id (get item detail by id)
+	// (PUT | PATH) v1/items/:id (update item by id)
+	// DELETE /v1/items/:id (delete item by id)
+
+	v1 := r.Group("/v1")
+	{
+		items := v1.Group("/items")
+		{
+			items.POST("", createItem(db))
+			items.GET("")
+			items.GET("/:id")
+			items.PATCH("/:id")
+			items.DELETE("/:id")
+		}
 	}
 
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": item,
-		})
-	})
 	r.Run(":3000")
+}
+
+func createItem(db *gorm.DB) func(*gin.Context) {
+	return func(ctx *gin.Context) {
+		var data TodoItemCreation
+
+		if err := ctx.ShouldBind(&data); err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		if err := db.Create(&data).Error; err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"data": data.Id,
+		})
+	}
 }
