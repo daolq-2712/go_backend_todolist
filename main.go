@@ -2,10 +2,14 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 type TodoItem struct {
@@ -19,6 +23,22 @@ type TodoItem struct {
 
 func main() {
 	fmt.Println("Hello World!!")
+
+	// Checking that an environment variable is present or not.
+	mysqlConnStr, ok := os.LookupEnv("MYSQL_CONNECTION")
+
+	if !ok {
+		log.Fatalln("Missing MySQL connection string.")
+	}
+
+	dsn := mysqlConnStr
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(db)
 
 	item := TodoItem{
 		Id:          8,
