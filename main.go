@@ -4,6 +4,7 @@ import (
 	"database/sql/driver"
 	"errors"
 	"fmt"
+	"go_backend_todolist/common"
 	"log"
 	"net/http"
 	"os"
@@ -169,8 +170,6 @@ func createItem(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 
-		ctx.JSON(http.StatusOK, gin.H{
-			"data": data.Id,
-		})
+		ctx.JSON(http.StatusOK, common.SimpleSuccessResponse(data.Id))
 	}
 }
