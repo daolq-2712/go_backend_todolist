@@ -157,16 +157,12 @@ func createItem(db *gorm.DB) func(*gin.Context) {
 		var data TodoItemCreation
 
 		if err := ctx.ShouldBind(&data); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
+			ctx.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
 			return
 		}
 
 		if err := db.Create(&data).Error; err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
+			ctx.JSON(http.StatusBadRequest, common.ErrDB(err))
 			return
 		}
 
