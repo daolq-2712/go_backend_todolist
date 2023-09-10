@@ -29,16 +29,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(db)
-
 	r := gin.Default()
-
-	// CRUD: Create, Read, Update, Delete
-	// POST /v1/items (create a new item)
-	// GET /v1/items (list items) /v1/items?page=1
-	// GET /v1/items/:id (get item detail by id)
-	// (PUT | PATH) v1/items/:id (update item by id)
-	// DELETE /v1/items/:id (delete item by id)
 
 	timeout := time.Duration(3) * time.Second
 
