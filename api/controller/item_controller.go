@@ -27,3 +27,23 @@ func (controller *TodoItemController) Create(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, common.SimpleSuccessResponse(data.Id))
 }
+
+func (controller *TodoItemController) Fetch(ctx *gin.Context) {
+
+	var paging common.Paging
+
+	paging.Process()
+
+	if err := ctx.ShouldBind(&paging); err != nil {
+		ctx.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
+		return
+	}
+
+	result, paging, err := controller.TodoItemUsecase.Fetch(ctx, paging)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, common.ErrDB(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, common.NewSuccessResponse(result, paging, nil))
+}

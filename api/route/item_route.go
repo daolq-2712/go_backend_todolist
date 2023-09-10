@@ -21,7 +21,7 @@ func NewTodoItemRoute(db *gorm.DB, timeout time.Duration, group *gin.RouterGroup
 	items := group.Group("/items")
 	{
 		items.POST("", controller.Create)
-		items.GET("")
+		items.GET("", controller.Fetch)
 		items.GET("/:id")
 		items.PATCH("/:id")
 		items.DELETE("/:id")
