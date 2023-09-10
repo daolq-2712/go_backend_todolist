@@ -3,31 +3,26 @@ package common
 import (
 	"errors"
 	"fmt"
-	"net/http"
 	"strings"
 )
 
 type AppError struct {
-	StatusCode int    `json:"status_code"`
-	RootErr    error  `json:"_"`
-	Message    string `json:"message"`
-	Log        string `json:"log"`
-	Key        string `json:"key"`
+	RootErr error  `json:"_"`
+	Message string `json:"message"`
+	Log     string `json:"log"`
+	Key     string `json:"key"`
 }
 
-func NewFullErrorResponse(statusCode int, root error, msg, log, key string) *AppError {
-	return &AppError{
-		StatusCode: statusCode, RootErr: root, Message: msg, Log: log, Key: key,
-	}
+func NewFullErrorResponse(root error, msg, log, key string) *AppError {
+	return &AppError{RootErr: root, Message: msg, Log: log, Key: key}
 }
 
 func NewErrorResponse(root error, msg, log, key string) *AppError {
 	return &AppError{
-		StatusCode: http.StatusBadRequest,
-		RootErr:    root,
-		Message:    msg,
-		Log:        log,
-		Key:        key,
+		RootErr: root,
+		Message: msg,
+		Log:     log,
+		Key:     key,
 	}
 }
 
@@ -51,7 +46,7 @@ func NewCustomError(root error, msg, key string) *AppError {
 }
 
 func ErrDB(err error) *AppError {
-	return NewFullErrorResponse(http.StatusInternalServerError, err, "Some thing went wrong with DB", err.Error(), "DB_ERROR")
+	return NewFullErrorResponse(err, "Some thing went wrong with DB", err.Error(), "DB_ERROR")
 }
 
 func ErrInvalidRequest(err error) *AppError {
