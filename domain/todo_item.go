@@ -5,6 +5,7 @@ import (
 	"database/sql/driver"
 	"errors"
 	"fmt"
+	"go_backend_todolist/common"
 	"strings"
 	"time"
 )
@@ -98,18 +99,22 @@ type TodoItemCreation struct {
 	Status      *ItemStatus `json:"status" gorm:"column:status"`
 }
 
-func (TodoItemCreation) TableName() string {
+func (TodoItem) TableName() string {
 	return "todo_items"
+}
+
+func (TodoItemCreation) TableName() string {
+	return TodoItem{}.TableName()
 }
 
 type TodoItemRepository interface {
 	Create(ctx context.Context, todoItem *TodoItemCreation) error
 
-	Fetch(ctx context.Context) ([]TodoItem, error)
+	Fetch(ctx context.Context, paging common.Paging) ([]TodoItem, common.Paging, error)
 }
 
 type TodoItemUsecase interface {
 	Create(ctx context.Context, todoItem *TodoItemCreation) error
 
-	Fetch(ctx context.Context) ([]TodoItem, error)
+	Fetch(ctx context.Context, paging common.Paging) ([]TodoItem, common.Paging, error)
 }

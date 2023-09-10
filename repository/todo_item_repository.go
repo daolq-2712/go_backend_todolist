@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"go_backend_todolist/common"
 	"go_backend_todolist/domain"
 
 	"gorm.io/gorm"
@@ -22,11 +23,17 @@ func (repository *todoItemRepository) Create(ctx context.Context, todoItem *doma
 	return nil
 }
 
-func (repository *todoItemRepository) Fetch(ctx context.Context) ([]domain.TodoItem, error) {
+func (repository *todoItemRepository) Fetch(ctx context.Context, paging common.Paging) ([]domain.TodoItem, common.Paging, error) {
+	db := repository.database.Where("status <> ?", "Deleted")
+
+	if err := db.Table(domain.TodoItem{}.TableName()).Count(&paging.Total).Error; err != nil {
+		return nil, paging, err
+	}
+
 	var todoItems []domain.TodoItem
 
-	if err := repository.database.Find(&todoItems).Error; err != nil {
-		return nil, err
+	if err := db.Offset((paging.Page - 1) * paging.Limit).Limit(paging.Limit).Find(&todoItems).Error; err != nil {
+		return nil, paging, err
 	}
-	return todoItems, nil
+	return todoItems, paging, nil
 }
