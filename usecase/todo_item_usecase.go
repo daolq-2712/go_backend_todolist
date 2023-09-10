@@ -23,3 +23,14 @@ func (usecase *todoItemUseCase) Create(ctx context.Context, todoItem *domain.Tod
 	defer cancel()
 	return usecase.todoItemRespository.Create(c, todoItem)
 }
+
+func (usecase *todoItemUseCase) Fetch(ctx context.Context) ([]domain.TodoItem, error) {
+	c, cancel := context.WithTimeout(ctx, usecase.contextTimeout)
+	defer cancel()
+
+	todoItems, err := usecase.todoItemRespository.Fetch(c)
+	if err != nil {
+		return nil, err
+	}
+	return todoItems, nil
+}

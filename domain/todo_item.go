@@ -60,7 +60,7 @@ func (item *ItemStatus) Value() (driver.Value, error) {
 	return item.string(), nil
 }
 
-func (item *ItemStatus) MarshallJSON() ([]byte, error) {
+func (item *ItemStatus) MarshalJSON() ([]byte, error) {
 	if item == nil {
 		return nil, nil
 	}
@@ -104,8 +104,12 @@ func (TodoItemCreation) TableName() string {
 
 type TodoItemRepository interface {
 	Create(ctx context.Context, todoItem *TodoItemCreation) error
+
+	Fetch(ctx context.Context) ([]TodoItem, error)
 }
 
 type TodoItemUsecase interface {
 	Create(ctx context.Context, todoItem *TodoItemCreation) error
+
+	Fetch(ctx context.Context) ([]TodoItem, error)
 }

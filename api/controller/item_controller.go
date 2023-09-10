@@ -27,3 +27,13 @@ func (controller *TodoItemController) Create(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, common.SimpleSuccessResponse(data.Id))
 }
+
+func (controller *TodoItemController) Fetch(ctx *gin.Context) {
+	result, err := controller.TodoItemUsecase.Fetch(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, common.ErrDB(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, common.SimpleSuccessResponse(result))
+}

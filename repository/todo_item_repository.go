@@ -21,3 +21,12 @@ func (repository *todoItemRepository) Create(ctx context.Context, todoItem *doma
 	}
 	return nil
 }
+
+func (repository *todoItemRepository) Fetch(ctx context.Context) ([]domain.TodoItem, error) {
+	var todoItems []domain.TodoItem
+
+	if err := repository.database.Find(&todoItems).Error; err != nil {
+		return nil, err
+	}
+	return todoItems, nil
+}
