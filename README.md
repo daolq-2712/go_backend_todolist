@@ -4,7 +4,7 @@
 
 - Router
 - Controller
-- Usecase
+- UseCase
 - Repository
 - Domain
 

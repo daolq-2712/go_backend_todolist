@@ -9,7 +9,7 @@ import (
 )
 
 type TodoItemController struct {
-	TodoItemUsecase domain.TodoItemUsecase
+	TodoItemUsecase domain.TodoItemUseCase
 }
 
 func (controller *TodoItemController) Create(ctx *gin.Context) {

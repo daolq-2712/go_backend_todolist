@@ -27,7 +27,8 @@ func NewErrorResponse(root error, msg, log, key string) *AppError {
 }
 
 func (e *AppError) RootError() error {
-	if err, ok := e.RootErr.(*AppError); ok {
+	var err *AppError
+	if errors.As(e.RootErr, &err) {
 		return err.RootError()
 	}
 
