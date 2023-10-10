@@ -1,0 +1,30 @@
+version: '3'
+services:
+  web-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: app
+    container_name: taxi-voucher-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+  # PostgreSQL
+  postgres:
+    image: postgres:16.0-alpine
+    container_name: todo-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: todo-postgres
+      POSTGRES_USER: daolq
+      POSTGRES_PASSWORD: daolqpostgre
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
