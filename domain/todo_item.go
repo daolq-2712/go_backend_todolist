@@ -113,7 +113,7 @@ type TodoItemRepository interface {
 	Fetch(ctx context.Context, paging common.Paging) ([]TodoItem, common.Paging, error)
 }
 
-type TodoItemUsecase interface {
+type TodoItemUseCase interface {
 	Create(ctx context.Context, todoItem *TodoItemCreation) error
 
 	Fetch(ctx context.Context, paging common.Paging) ([]TodoItem, common.Paging, error)
