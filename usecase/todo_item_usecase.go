@@ -8,28 +8,28 @@ import (
 )
 
 type todoItemUseCase struct {
-	todoItemRespository domain.TodoItemRepository
-	contextTimeout      time.Duration
+	todoItemRepository domain.TodoItemRepository
+	contextTimeout     time.Duration
 }
 
-func NewTodoItemUsecase(repository domain.TodoItemRepository, timeout time.Duration) domain.TodoItemUsecase {
+func NewTodoItemUseCase(repository domain.TodoItemRepository, timeout time.Duration) domain.TodoItemUseCase {
 	return &todoItemUseCase{
-		todoItemRespository: repository,
-		contextTimeout:      timeout,
+		todoItemRepository: repository,
+		contextTimeout:     timeout,
 	}
 }
 
-func (usecase *todoItemUseCase) Create(ctx context.Context, todoItem *domain.TodoItemCreation) error {
-	c, cancel := context.WithTimeout(ctx, usecase.contextTimeout)
+func (useCase *todoItemUseCase) Create(ctx context.Context, todoItem *domain.TodoItemCreation) error {
+	c, cancel := context.WithTimeout(ctx, useCase.contextTimeout)
 	defer cancel()
-	return usecase.todoItemRespository.Create(c, todoItem)
+	return useCase.todoItemRepository.Create(c, todoItem)
 }
 
-func (usecase *todoItemUseCase) Fetch(ctx context.Context, paging common.Paging) ([]domain.TodoItem, common.Paging, error) {
-	c, cancel := context.WithTimeout(ctx, usecase.contextTimeout)
+func (useCase *todoItemUseCase) Fetch(ctx context.Context, paging common.Paging) ([]domain.TodoItem, common.Paging, error) {
+	c, cancel := context.WithTimeout(ctx, useCase.contextTimeout)
 	defer cancel()
 
-	todoItems, paging, err := usecase.todoItemRespository.Fetch(c, paging)
+	todoItems, paging, err := useCase.todoItemRepository.Fetch(c, paging)
 	if err != nil {
 		return nil, paging, err
 	}

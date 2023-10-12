@@ -13,7 +13,7 @@ import (
 func NewTodoItemRoute(db *gorm.DB, timeout time.Duration, group *gin.RouterGroup) {
 
 	repository := repository.NewTodoItemRepository(db)
-	controller := controller.TodoItemController{TodoItemUsecase: usecase.NewTodoItemUsecase(
+	controller := controller.TodoItemController{TodoItemUsecase: usecase.NewTodoItemUseCase(
 		repository,
 		timeout,
 	)}
